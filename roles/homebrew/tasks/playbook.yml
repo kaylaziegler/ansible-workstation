@@ -4,3 +4,6 @@
 
   roles:
     - homebrew
+
+  handlers:
+    - include: roles/rbenv/handlers/main.yml

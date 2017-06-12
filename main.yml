@@ -20,3 +20,7 @@
       tags: ['gems']
     - role: postgresql
       tags: ['postgresql']
+    - role: phpunit
+      tags: ['phpunit']
+    - role: wp-cli
+      tags: ['wp-cli']

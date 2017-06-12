@@ -71,6 +71,18 @@
   command: "{{ homebrew_brew_bin_path }}/brew update --force"
   when: homebrew_binary.stat.exists == false
 
+# Tap.
+- name: Ensure configured taps are tapped.
+  homebrew_tap: "tap={{ item }} state=present"
+  with_items: "{{ homebrew_taps }}"
+
+- name: Remove pre-installed PHP version.
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ php_remove_directories }}"
+  become: yes
+
 # Brew.
 - name: Ensure configured homebrew packages are installed.
   homebrew:
@@ -78,6 +90,8 @@
     install_options: "{{ item.install_options | default(omit) }}"
     state: "{{ item.state | default('latest') }}"
   with_items: "{{ homebrew_installed_packages }}"
+  notify:
+    - source bash_profile
 
 - name: Upgrade all homebrew packages.
   homebrew: update_homebrew=yes upgrade_all=yes

@@ -1,12 +1,4 @@
 ---
-uninstall_homebrew_steps:
-  - curl -sLO https://raw.githubusercontent.com/Homebrew/install/master/uninstall
-  - chmod +x ./uninstall
-  - ./uninstall --force
-  - rm -rf /usr/local/Homebrew
-  - rm -rf /usr/local/Caskroom
-  - rm -rf /usr/local/bin/brew
-
 homebrew_installed_packages:
   - chromedriver
   - redis
@@ -16,6 +8,12 @@ homebrew_installed_packages:
   - ssh-copy-id
   - git
   - wget
+  - php70
+
+homebrew_taps:
+  - homebrew/dupes
+  - homebrew/versions
+  - homebrew/homebrew-php
 
 homebrew_cask_apps: []
   # - atom
