@@ -1,0 +1,83 @@
+---
+# Homebrew setup prerequisites.
+- name: Ensure Homebrew parent directory has correct permissions.
+  file:
+    path: "{{ homebrew_prefix }}"
+    owner: root
+    group: admin
+    state: directory
+    mode: 0775
+  become: yes
+
+- stat:
+    path: "{{ homebrew_install_path }}"
+  register: st
+
+- name: Remove HB packages if they exist
+  shell: brew remove --force --ignore-dependencies $(brew list)
+  when: st.stat.exists == true
+
+- name: Ensure Homebrew directory exists.
+  file:
+    path: "{{ homebrew_install_path }}"
+    owner: root
+    group: admin
+    state: directory
+    mode: 0775
+  become: yes
+
+# Clone Homebrew.
+- name: Ensure Homebrew is installed.
+  git:
+    repo: "{{ homebrew_repo }}"
+    version: master
+    dest: "{{ homebrew_install_path }}"
+    update: no
+    accept_hostkey: yes
+    depth: 1
+
+# Adjust Homebrew permissions.
+- name: Ensure proper permissions and ownership on homebrew_brew_bin_path dirs.
+  file:
+    path: "{{ homebrew_brew_bin_path }}"
+    state: directory
+    owner: root
+    group: admin
+    mode: 0775
+  become: yes
+
+- name: Ensure proper ownership on homebrew_install_path subdirs.
+  file:
+    path: "{{ homebrew_install_path }}"
+    state: directory
+    owner: root
+    group: admin
+  become: yes
+
+# Place brew binary in proper location and complete setup.
+- name: Check if homebrew binary is already in place.
+  stat: "path={{ homebrew_brew_bin_path }}/brew"
+  register: homebrew_binary
+
+- name: Symlink brew to homebrew_brew_bin_path.
+  file:
+    src: "{{ homebrew_install_path }}/bin/brew"
+    dest: "{{ homebrew_brew_bin_path }}/brew"
+    state: link
+  when: homebrew_binary.stat.exists == false
+  become: yes
+
+- name: Force update brew after installation.
+  command: "{{ homebrew_brew_bin_path }}/brew update --force"
+  when: homebrew_binary.stat.exists == false
+
+# Brew.
+- name: Ensure configured homebrew packages are installed.
+  homebrew:
+    name: "{{ item.name | default(item) }}"
+    install_options: "{{ item.install_options | default(omit) }}"
+    state: "{{ item.state | default('latest') }}"
+  with_items: "{{ homebrew_installed_packages }}"
+
+- name: Upgrade all homebrew packages.
+  homebrew: update_homebrew=yes upgrade_all=yes

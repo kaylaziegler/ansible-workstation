@@ -1,0 +1,13 @@
+---
+# - name: Uninstall all gems
+#   shell: |
+#     gem update --system
+#     gem uninstall --all
+#   become: true
+#   become_user: root
+
+- name: Remove existing Command Line Tools installation
+  file:
+    path: '{{ clt_path }}'
+    state: absent
+  become: yes

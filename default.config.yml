@@ -1,0 +1,17 @@
+---
+homebrew_installed_packages:
+  - chromedriver
+  - redis
+  - elasticsearch@2.4
+  - { name: elasticsearch@2.4, state: linked, install_options: force } # linking will work iff no other version is linked
+  - rbenv
+  - phantomjs
+  - ssh-copy-id
+
+clt_path: /Library/Developer/CommandLineTools
+
+chapman_apps:
+  #- https://github.com/chapmanu/inside
+  - https://github.com/chapmanu/cascade-assets
+  - https://github.com/chapmanu/signage
+  #- https://github.com/chapmanu/blogs
