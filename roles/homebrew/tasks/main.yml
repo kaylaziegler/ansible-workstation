@@ -81,3 +81,27 @@
 
 - name: Upgrade all homebrew packages.
   homebrew: update_homebrew=yes upgrade_all=yes
+
+# Install casks.
+- name: Install configured cask applications.
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+    install_options: appdir=/Applications
+  with_items: "{{ homebrew_cask_apps }}"
+
+# Customize Atom after being installed with Homebrew.
+- name: Configure Atom packages.
+  shell: "{{ item }}"
+  with_items: "{{ atom_packages }}"
+
+- name: Check for a style file.
+  stat:
+    path: "{{ atom_styling_path }}"
+  register: style_path
+
+- name: Configure Atom style.
+  copy:
+    src: "{{ atom_styling_path }}"
+    dest: ~/.atom/styles.less
+  when: style_path.stat.exists

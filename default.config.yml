@@ -1,12 +1,25 @@
 ---
+uninstall_homebrew_steps:
+  - curl -sLO https://raw.githubusercontent.com/Homebrew/install/master/uninstall
+  - chmod +x ./uninstall
+  - ./uninstall --force
+  - rm -rf /usr/local/Homebrew
+  - rm -rf /usr/local/Caskroom
+  - rm -rf /usr/local/bin/brew
+
 homebrew_installed_packages:
   - chromedriver
   - redis
   - elasticsearch@2.4
-  - { name: elasticsearch@2.4, state: linked, install_options: force } # linking will work iff no other version is linked
   - rbenv
   - phantomjs
   - ssh-copy-id
+  - git
+  - wget
+
+homebrew_cask_apps: []
+  # - atom
+  # - google-chrome
 
 clt_path: /Library/Developer/CommandLineTools
 

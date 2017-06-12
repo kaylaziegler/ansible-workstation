@@ -5,6 +5,9 @@
 #     gem uninstall --all
 #   become: true
 #   become_user: root
+- name: Uninstall existing Homebrew
+  shell: "{{ item }}"
+  with_items: "{{ uninstall_homebrew_steps }}"
 
 - name: Remove existing Command Line Tools installation
   file:
