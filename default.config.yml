@@ -11,7 +11,7 @@ homebrew_installed_packages:
 clt_path: /Library/Developer/CommandLineTools
 
 chapman_apps:
-  #- https://github.com/chapmanu/inside
-  - https://github.com/chapmanu/cascade-assets
-  - https://github.com/chapmanu/signage
-  #- https://github.com/chapmanu/blogs
+  - cascade-assets
+  - signage
+  - blogs
+  - inside
